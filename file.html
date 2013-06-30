@@ -1,0 +1,165 @@
+<html>
+
+<script type="text/javascript">
+var variable = "top-level";
+function parentFunction() {
+var variable = "local";
+function childFunction() {
+print(variable);
+}
+return childFunction;
+}
+var child = parentFunction();
+child();
+
+
+
+function makeAddFunction(amount) {
+function add(number) {
+return number + amount;
+}
+return add;
+}
+var addTwo = makeAddFunction(2);
+var addFive = makeAddFunction(5);
+show(addTwo(1) + addFive(1));
+
+
+function forEach(array, action) {
+	for (var i = 0; i < array.length; i++)
+		action(array[i]);
+}
+
+function reduce(combine, base, array) {	
+	forEach(array, function (element) {
+		base = combine(base, element);
+	});
+return base;
+}
+
+function add(a, b) {
+	return a + b;
+}
+
+function sum(numbers) {
+	return reduce(add, 0, numbers);
+}
+
+function checkZero(total,element){
+	if(element == 0)
+		return total += 1;
+	else 
+		return total;
+}
+
+function countZeros(numbers){
+   return reduce(checkZero,0,numbers);
+}
+countZeros(numbers);
+
+
+
+//2nd way-----------------------------------------------------------
+
+function forEach(array, action) {
+	for (var i = 0; i < array.length; i++)
+		action(array[i]);
+}
+
+var numbers = [1,2,3,0,8,0];
+function reduceWithFilter(predicate, base, array ) {	
+	forEach(array, function (element) {
+		base = filter(predicate,base, element);
+	});
+return base;
+}
+
+
+function filter(fun,total,element){
+   if(fun(element))
+   		return total += 1;
+   	else
+   		return total;
+}
+
+var predicate = function(x){
+	if (x == 0)
+		return true;
+	else
+		return false;
+};
+
+
+
+function count(numbers){
+	return reduceWithFilter(predicate,0,numbers);
+}
+
+count(numbers);
+
+//3rd way-------------------------------------------------
+function count(test, array) {
+	return reduce(function(total, element) {
+		return total + (test(element) ? 1 : 0);
+	
+		}, 0, array);
+	}
+function equals(x) {
+	return function(element) {return x === element;};
+}
+function countZeroes(array) {
+	return count(equals(0), array);
+}
+
+
+//map-----------
+function map(func, array) {
+var result = [];
+	forEach(array, function (element) {
+		result.push(func(element));
+	});
+	return result;
+}
+map(Math.round, [0.01, 2, 9.89, Math.PI]);
+
+//generating html
+
+function tag(name, content, attributes) {
+	return {name: name, attributes: attributes, content: content};
+}
+
+function link(target, text) {
+	return tag("a", [text], {href: target});
+}
+function htmlDoc(title, bodyContent) {
+	return tag("html", [tag("head", [tag("title", [title])]),
+	tag("body", bodyContent)]);
+}
+
+function img(source){
+	return tag("img",[], { src:source })
+}
+
+function escapeHTML(text) {
+var replacements = [[/&/g, "&amp;"], [/"/g, "&quot;"],
+					[/</g, "&lt;"], [/>/g, "&gt;"]];
+	forEach(replacements, function(replace) {
+		text = text.replace(replace[0], replace[1]);
+	});
+return text;
+}"
+
+
+
+
+</script>
+
+
+
+<button type="button" onClick="child()">Click Me!</button> 
+
+ 
+</html>
+
+
+
